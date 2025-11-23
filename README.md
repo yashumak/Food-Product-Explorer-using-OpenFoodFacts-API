@@ -1,70 +1,208 @@
-# Getting Started with Create React App
+# Food Product Explorer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web application that allows users to search, filter, and view detailed information about food products using the **OpenFoodFacts** API.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🎯 Objective
 
-### `npm start`
+Create a responsive React (or Next.js) app that fetches product data from the OpenFoodFacts API and provides search, barcode lookup, category filtering, sorting, pagination, and detailed product pages.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## ⚙️ Technologies
 
-### `npm test`
+* **Front-end:** ReactJS (or Next.js)
+* **Styling:** Tailwind CSS, Bootstrap, or plain CSS
+* **State management (optional):** React Context API or Redux
+* **API:** OpenFoodFacts — `https://world.openfoodfacts.org/`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+---
 
-### `npm run build`
+## ✅ Features
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Homepage**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   * Displays a list of food products fetched from the OpenFoodFacts API.
+   * Each product card shows:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+     * Product name
+     * Image
+     * Category
+     * Ingredients (if available)
+     * Nutrition Grade (A, B, C, D, E)
+   * Pagination: infinite scroll or "Load more" button.
 
-### `npm run eject`
+2. **Search by name**
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+   * Search bar to filter products by product name (debounced). Uses the search endpoint.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+3. **Barcode search**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+   * Search by barcode (UPC/EAN) to retrieve a single product (product detail endpoint).
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. **Category filter**
 
-## Learn More
+   * Dropdown or side filter to select a category (e.g., beverages, dairy, snacks).
+   * Categories fetched from the OpenFoodFacts category endpoint.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+5. **Sorting**
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+   * Sort by Product name (A–Z, Z–A)
+   * Sort by Nutrition Grade (ascending/descending)
 
-### Code Splitting
+6. **Product Detail Page**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+   * Product image (large)
+   * Full list of ingredients
+   * Nutritional values (energy, fat, carbs, proteins, etc.)
+   * Labels (vegan, gluten-free, etc.)
 
-### Analyzing the Bundle Size
+7. **Responsive design**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+   * Works well on mobile and desktop.
 
-### Making a Progressive Web App
+8. **(Bonus)** Cart functionality and persistent state using Context/Redux or localStorage.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+---
 
-### Advanced Configuration
+## 📡 OpenFoodFacts API — Useful Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+* Get products by category:
 
-### Deployment
+  ```
+  https://world.openfoodfacts.org/category/{category}.json
+  ```
+* Search products by name:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+  ```
+  https://world.openfoodfacts.org/cgi/search.pl?search_terms={name}&json=true
+  ```
+* Get product details by barcode:
 
-### `npm run build` fails to minify
+  ```
+  https://world.openfoodfacts.org/api/v0/product/{barcode}.json
+  ```
+* Example:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+  ```
+  https://world.openfoodfacts.org/api/v0/product/737628064502.json
+  ```
+
+> Note: The API is maintained by a non-profit. If the server is down, wait briefly and retry.
+
+---
+
+## 📁 Project Structure (suggested)
+
+```
+food-product-explorer/
+├─ public/
+├─ src/
+│  ├─ components/
+│  │  ├─ ProductCard.jsx
+│  │  ├─ SearchBar.jsx
+│  │  ├─ CategoryFilter.jsx
+│  │  ├─ SortControls.jsx
+│  │  └─ InfiniteLoader.jsx
+│  ├─ pages/ (or routes/ for Next.js)
+│  │  ├─ Home.jsx
+│  │  └─ ProductDetail.jsx
+│  ├─ contexts/ (optional)
+│  ├─ hooks/
+│  ├─ services/
+│  │  └─ openFoodFactsApi.js
+│  ├─ styles/
+│  └─ App.jsx
+├─ .env.local
+├─ package.json
+└─ README.md
+```
+
+---
+
+## 🛠️ Example Implementation Notes
+
+### API service (example)
+
+* Create a single file `openFoodFactsApi.js` that exports methods:
+
+  * `searchProducts({ query, page, pageSize })` — wraps `search.pl` endpoint.
+  * `getProductsByCategory(category, page)` — wraps category endpoint.
+  * `getProductByBarcode(barcode)` — wraps `api/v0/product/{barcode}.json`.
+
+### Pagination strategy
+
+* Use `page` and `page_size` params with `search.pl` for server-side paging.
+* For infinite scroll: fetch next page when the user scrolls near the bottom.
+* For "Load more": request the next page and append results.
+
+### Search UX
+
+* Debounce text input (e.g., 300ms) to avoid excessive requests.
+* Show a spinner while loading and a friendly message when no results.
+
+### Barcode lookup
+
+* On barcode search success, navigate directly to the product detail page.
+* Show an error/toast when product is not found.
+
+### Sorting
+
+* Sorting by name and nutrition grade can be done client-side for fetched results.
+* Alternatively, apply server-side filters where possible and then sort client-side.
+
+---
+
+## 📥 Installation & Running (React example)
+
+```bash
+# clone
+git clone <your-repo-url>
+cd food-product-explorer
+
+# install
+npm install
+
+# run (development)
+npm start
+
+# build (production)
+npm run build
+```
+
+If using Next.js:
+
+```bash
+npm run dev
+npm run build
+npm run start
+```
+
+Add `.env.local` for any environment variables (if needed):
+
+```
+REACT_APP_API_BASE=https://world.openfoodfacts.org
+```
+
+---
+
+## ✅ Evaluation Criteria (for submission)
+
+* **Code quality:** clean, modular components, consistent naming
+* **API integration:** correct usage of OpenFoodFacts endpoints
+* **UI/UX:** responsive and user-friendly design
+* **Functionality:** search, filter, barcode lookup, sorting implemented
+* **Pagination:** infinite scroll or smooth load-more
+
+---
+
+## 💡 Bonus / Extra Credit
+
+* Cart functionality (persisted via Context + localStorage)
+* Unit tests for components (Jest + React Testing Library)
+* Accessibility improvements (ARIA labels, keyboard nav)
+* Caching API responses for repeated queries
+
+---
+

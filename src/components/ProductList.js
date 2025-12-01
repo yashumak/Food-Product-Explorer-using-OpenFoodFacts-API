@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getProductsByCategory, searchProductsByName, getProductByBarcode, getCategories, fuzzySearchProductsByName } from '../api/openFoodFacts';
+import { getProductsByCategory, getProductByBarcode, getCategories, fuzzySearchProductsByName } from '../api/openFoodFacts';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -11,8 +11,8 @@ const ProductList = () => {
   const [barcode, setBarcode] = useState('');
   const [barcodeProduct, setBarcodeProduct] = useState(null);
   const [categories, setCategories] = useState([]);
-  const [selectedCategory, setSelectedCategory] = useState('snacks'); // Default category
-  const [sortOrder, setSortOrder] = useState(''); // 'asc' for A-Z, 'desc' for Z-A, 'nutri-asc', 'nutri-desc'
+  const [selectedCategory, setSelectedCategory] = useState('snacks');
+  const [sortOrder, setSortOrder] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,7 +30,6 @@ const ProductList = () => {
       }
 
       if (newProducts && newProducts.length > 0) {
-        // Apply sorting
         const sortedProducts = sortProducts(newProducts, sortOrder);
         setProducts((prevProducts) => (page === 1 ? sortedProducts : [...prevProducts, ...sortedProducts]));
         setHasMore(true);
@@ -89,7 +88,6 @@ const ProductList = () => {
       } else if (order === 'nutri-asc' || order === 'nutri-desc') {
         const gradeA = a.nutrition_grades || '';
         const gradeB = b.nutrition_grades || '';
-        // Simple alphabetical sort for nutrition grades (a, b, c, d, e)
         if (order === 'nutri-asc') {
           return gradeA.localeCompare(gradeB);
         } else {

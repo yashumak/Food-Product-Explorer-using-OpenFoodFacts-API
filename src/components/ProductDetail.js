@@ -60,7 +60,6 @@ const ProductDetail = () => {
         <p><strong>Stores:</strong> {product.stores || 'N/A'}</p>
         <p><strong>Countries:</strong> {product.countries || 'N/A'}</p>
       </div>
-      {/* Add more details as needed */}
     </div>
   );
 };

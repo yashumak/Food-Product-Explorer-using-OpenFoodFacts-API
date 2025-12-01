@@ -1,7 +1,5 @@
 const BASE_URL = 'https://world.openfoodfacts.org';
 
-
-
 export const getProductsByCategory = async (category, page = 1) => {
     try {
         const response = await fetch(`${BASE_URL}/category/${category}/${page}.json`);
@@ -14,8 +12,8 @@ export const getProductsByCategory = async (category, page = 1) => {
     }
 };
 
-const rawSearchCache = {}; // Cache for raw API responses
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
+const rawSearchCache = {};
+const CACHE_DURATION = 5 * 60 * 1000;
 
 export const searchProductsByName = async (name, page = 1) => {
     const cacheKey = `${name}-${page}`;
@@ -27,7 +25,6 @@ export const searchProductsByName = async (name, page = 1) => {
     }
 
     try {
-        // Fetch a larger set of results to enable client-side filtering
         const response = await fetch(`${BASE_URL}/cgi/search.pl?search_terms=${name}&page=${page}&page_size=100&json=true`);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
@@ -43,7 +40,7 @@ export const searchProductsByName = async (name, page = 1) => {
 };
 
 export const fuzzySearchProductsByName = async (name, page = 1) => {
-    const allProducts = await searchProductsByName(name, 1); // Fetch initial results
+    const allProducts = await searchProductsByName(name, 1);
 
     if (!name) {
         return allProducts;
@@ -54,8 +51,7 @@ export const fuzzySearchProductsByName = async (name, page = 1) => {
         product.product_name && product.product_name.toLowerCase().includes(lowerCaseName)
     );
 
-    // Implement pagination for the filtered results client-side
-    const pageSize = 20; // Assuming a page size for client-side pagination
+    const pageSize = 20;
     const startIndex = (page - 1) * pageSize;
     const endIndex = startIndex + pageSize;
 
@@ -78,13 +74,11 @@ export const getProductByBarcode = async (barcode) => {
 
 export const getCategories = async () => {
     try {
-        // The API for categories is a bit different, it's a "facet" query
         const response = await fetch(`${BASE_URL}/categories.json`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        // The categories are nested under 'tags' and each tag has 'name' and 'products' count
         return data.tags.filter(tag => tag.products > 0).map(tag => tag.name);
     } catch (error) {
         console.error("Error fetching categories:", error);
